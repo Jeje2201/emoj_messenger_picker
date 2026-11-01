@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="UTF-8"><title>Messenger Emoji - Tests</title></head>
+<body>
+  <h1>Tests Messenger Emoji</h1>
+  <pre id="results"></pre>
+  <div id="editor" role="textbox" aria-multiline="true" data-lexical-editor="true" contenteditable="true" style="border: 1px solid; min-height: 60px"></div>
+  <div id="search" role="textbox" contenteditable="true" style="border: 1px solid; min-height: 30px"></div>
+  <script src="../extension/rules.js"></script>
+  <script>
+    const storageListeners = [];
+    globalThis.chrome = {
+      storage: {
+        local: { get: async () => ({ settings: MessengerEmojiRules.defaults }) },
+        onChanged: { addListener: (listener) => storageListeners.push(listener) }
+      }
+    };
+    const { defaults, normalizeSettings, findReplacement } = MessengerEmojiRules;
+    const results = [];
+    function check(name, condition) {
+      results.push({ name, passed: Boolean(condition) });
+      if (!condition) throw new Error(name);
+    }
+    check("Completed shortcut", findReplacement("Salut (sob)", defaults)?.emoji === "\uD83D\uDE2D");
+    check("Partial shortcut", findReplacement("(so", defaults) === null);
+    check("Caret only", findReplacement("(sob) suite", defaults) === null);
+    check("Disabled", findReplacement("(sob)", { ...defaults, enabled: false }) === null);
+    check("Empty mappings preserved", normalizeSettings({ mappings: [] }).mappings.length === 0);
+    const custom = { enabled: true, mappings: [
+      { shortcut: ")", emoji: "short" }, { shortcut: "(a+b)", emoji: "long" },
+      { shortcut: "cool", emoji: "\uD83D\uDE0E" }
+    ] };
+    check("Longest literal shortcut", findReplacement("(a+b)", custom)?.emoji === "long");
+    check("Word boundary", findReplacement("uncool", custom) === null);
+    check("Custom plain word", findReplacement("C'est cool", custom)?.emoji === "\uD83D\uDE0E");
+    check("Case sensitive", findReplacement("COOL", custom) === null);
+    check("Invalid and duplicate mappings", normalizeSettings({ mappings: [null,
+      { shortcut: "", emoji: "x" }, { shortcut: "a", emoji: "x" },
+      { shortcut: "a", emoji: "y" }
+    ] }).mappings.length === 1);
+    document.querySelector("#results").textContent = results.map(result => "PASS " + result.name).join("\n");
+    globalThis.testResults = results;
+    globalThis.changeSettings = (settings) => storageListeners.forEach(listener => listener({ settings: { newValue: settings } }, "local"));
+    globalThis.inputCommitChecks = [];
+    document.querySelector("#editor").addEventListener("input", (event) => {
+      event.stopPropagation();
+      if (event.inputType === "insertText" && event.data === ")") {
+        queueMicrotask(() => {
+          const selection = getSelection();
+          const prefix = document.createRange();
+          prefix.selectNodeContents(event.target);
+          prefix.setEnd(selection.anchorNode, selection.anchorOffset);
+          inputCommitChecks.push(prefix.toString().endsWith(")"));
+        });
+      }
+    });
+  </script>
+  <script src="../extension/content.js"></script>
+</body>
+</html>
