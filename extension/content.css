@@ -1,0 +1,36 @@
+.messenger-emoji-suggestions {
+  all: initial;
+  position: fixed;
+  z-index: 2147483647;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  box-sizing: border-box;
+  max-height: 180px;
+  overflow: auto;
+  padding: 8px;
+  border: 1px solid #dce3df;
+  border-radius: 10px;
+  background: #fafcfb;
+  box-shadow: 0 4px 16px #0003;
+  font: 14px "Trebuchet MS", sans-serif;
+}
+.messenger-emoji-suggestions[hidden] { display: none; }
+.messenger-emoji-suggestion {
+  all: initial;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  color: #202b29;
+  font: 13px "Trebuchet MS", sans-serif;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.messenger-emoji-suggestion:hover, .messenger-emoji-suggestion:focus-visible {
+  background: #e3eee7;
+}
+.messenger-emoji-suggestion:focus-visible { outline: 2px solid #17664d; }
+.messenger-emoji-suggestion-icon { font-size: 22px; }

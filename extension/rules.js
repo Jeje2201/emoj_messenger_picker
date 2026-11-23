@@ -4,11 +4,11 @@
   const defaults = {
     enabled: true,
     mappings: [
-      { shortcut: "(cwl)", emoji: "\uD83D\uDE02" },
-      { shortcut: "(sob)", emoji: "\uD83D\uDE2D" },
-      { shortcut: "(heart)", emoji: "\u2764\uFE0F" },
-      { shortcut: "(smile)", emoji: "\uD83D\uDE0A" },
-      { shortcut: "(thumbsup)", emoji: "\uD83D\uDC4D" },
+      { shortcut: ":cwl:", emoji: "\uD83D\uDE02" },
+      { shortcut: ":sob:", emoji: "\uD83D\uDE2D" },
+      { shortcut: ":heart:", emoji: "\u2764\uFE0F" },
+      { shortcut: ":smile:", emoji: "\uD83D\uDE0A" },
+      { shortcut: ":thumbsup:", emoji: "\uD83D\uDC4D" },
     ],
   };
 
@@ -17,7 +17,7 @@
       return structuredClone(defaults);
     }
     const seen = new Set();
-    const mappings = value.mappings.filter((mapping) => {
+    let mappings = value.mappings.filter((mapping) => {
       if (!mapping || typeof mapping.shortcut !== "string" ||
           typeof mapping.emoji !== "string" || !mapping.shortcut.trim() ||
           !mapping.emoji.trim() || /[\r\n]/u.test(mapping.shortcut) ||
@@ -28,6 +28,16 @@
       seen.add(mapping.shortcut);
       return true;
     }).map(({ shortcut, emoji }) => ({ shortcut, emoji }));
+    if (value.formatVersion !== 2) {
+      const originalShortcuts = new Set(mappings.map(({ shortcut }) => shortcut));
+      mappings = mappings.flatMap(({ shortcut, emoji }) => {
+        if (shortcut.length < 2 || !shortcut.startsWith("(") || !shortcut.endsWith(")")) {
+          return [{ shortcut, emoji }];
+        }
+        const converted = `:${shortcut.slice(1, -1)}:`;
+        return originalShortcuts.has(converted) ? [] : [{ shortcut: converted, emoji }];
+      });
+    }
     return { enabled: value.enabled !== false, mappings };
   }
 
@@ -45,7 +55,16 @@
     return null;
   }
 
-  const api = { defaults, normalizeSettings, findReplacement };
+  function findSuggestions(text, settings) {
+    if (!settings.enabled) return null;
+    const start = text.lastIndexOf(":");
+    if (start === -1) return null;
+    const query = text.slice(start);
+    const mappings = settings.mappings.filter(({ shortcut }) => shortcut.startsWith(query));
+    return mappings.length ? { length: query.length, mappings } : null;
+  }
+
+  const api = { defaults, normalizeSettings, findReplacement, findSuggestions };
   globalThis.MessengerEmojiRules = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })();

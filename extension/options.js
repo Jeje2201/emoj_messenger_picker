@@ -96,7 +96,7 @@ form.addEventListener("submit", async (event) => {
   if (saving) return;
   const mappings = readMappings();
   if (!mappings) return;
-  const settings = { enabled: enabled.checked, mappings };
+  const settings = { formatVersion: 2, enabled: enabled.checked, mappings };
   saving = true;
   const controls = [...form.querySelectorAll("button, input")];
   controls.forEach((control) => { control.disabled = true; });

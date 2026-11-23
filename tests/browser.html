@@ -1,9 +1,11 @@
 <!doctype html>
 <html lang="fr">
-<head><meta charset="UTF-8"><title>Messenger Emoji - Tests</title></head>
+<head><meta charset="UTF-8"><title>Messenger Emoji - Tests</title><link rel="stylesheet" href="../extension/content.css"></head>
 <body>
   <h1>Tests Messenger Emoji</h1>
   <pre id="results"></pre>
+  <button id="test-suggestions" type="button">Tester les suggestions</button>
+  <pre id="suggestion-results"></pre>
   <div id="editor" role="textbox" aria-multiline="true" data-lexical-editor="true" contenteditable="true" style="border: 1px solid; min-height: 60px"></div>
   <div id="search" role="textbox" contenteditable="true" style="border: 1px solid; min-height: 30px"></div>
   <script src="../extension/rules.js"></script>
@@ -15,16 +17,19 @@
         onChanged: { addListener: (listener) => storageListeners.push(listener) }
       }
     };
-    const { defaults, normalizeSettings, findReplacement } = MessengerEmojiRules;
+    const { defaults, normalizeSettings, findReplacement, findSuggestions } = MessengerEmojiRules;
     const results = [];
     function check(name, condition) {
       results.push({ name, passed: Boolean(condition) });
       if (!condition) throw new Error(name);
     }
-    check("Completed shortcut", findReplacement("Salut (sob)", defaults)?.emoji === "\uD83D\uDE2D");
-    check("Partial shortcut", findReplacement("(so", defaults) === null);
-    check("Caret only", findReplacement("(sob) suite", defaults) === null);
-    check("Disabled", findReplacement("(sob)", { ...defaults, enabled: false }) === null);
+    check("Completed shortcut", findReplacement("Salut :sob:", defaults)?.emoji === "\uD83D\uDE2D");
+    check("Partial shortcut", findReplacement(":so", defaults) === null);
+    check("Caret only", findReplacement(":sob: suite", defaults) === null);
+    check("Disabled", findReplacement(":sob:", { ...defaults, enabled: false }) === null);
+    check("Suggestions for colon", findSuggestions(":", defaults)?.mappings.length === 5);
+    check("Suggestions filtered", findSuggestions(":c", defaults)?.mappings[0].shortcut === ":cwl:");
+    check("Suggestions disabled", findSuggestions(":", { ...defaults, enabled: false }) === null);
     check("Empty mappings preserved", normalizeSettings({ mappings: [] }).mappings.length === 0);
     const custom = { enabled: true, mappings: [
       { shortcut: ")", emoji: "short" }, { shortcut: "(a+b)", emoji: "long" },
@@ -44,17 +49,56 @@
     globalThis.inputCommitChecks = [];
     document.querySelector("#editor").addEventListener("input", (event) => {
       event.stopPropagation();
-      if (event.inputType === "insertText" && event.data === ")") {
+      if (event.inputType === "insertText" && event.data === ":") {
         queueMicrotask(() => {
           const selection = getSelection();
           const prefix = document.createRange();
           prefix.selectNodeContents(event.target);
           prefix.setEnd(selection.anchorNode, selection.anchorOffset);
-          inputCommitChecks.push(prefix.toString().endsWith(")"));
+          inputCommitChecks.push(prefix.toString().endsWith(":"));
         });
       }
     });
   </script>
   <script src="../extension/content.js"></script>
+  <script>
+    document.querySelector("#test-suggestions").addEventListener("click", async () => {
+      const output = document.querySelector("#suggestion-results");
+      const editor = document.createElement("div");
+      editor.contentEditable = "true";
+      editor.setAttribute("role", "textbox");
+      editor.setAttribute("aria-multiline", "true");
+      document.body.append(editor);
+      const wait = () => new Promise((resolve) => setTimeout(resolve, 0));
+      const assert = (condition, message) => {
+        if (!condition) throw new Error(message);
+      };
+      try {
+        editor.focus();
+        assert(document.execCommand("insertText", false, ":"), "Saisie de : impossible");
+        await wait();
+        const panel = document.querySelector(".messenger-emoji-suggestions");
+        assert(!panel.hidden && panel.querySelectorAll("button").length === 5, "Suggestions initiales");
+        assert(document.execCommand("insertText", false, "c"), "Saisie de c impossible");
+        await wait();
+        const buttons = panel.querySelectorAll("button");
+        assert(buttons.length === 1 && buttons[0].textContent.includes(":cwl:"), "Filtrage");
+        buttons[0].click();
+        assert(editor.textContent === "\uD83D\uDE02" && panel.hidden, "Insertion par clic");
+        editor.textContent = "";
+        editor.focus();
+        assert(document.execCommand("insertText", false, ":"), "Nouvelle saisie impossible");
+        await wait();
+        changeSettings({ ...defaults, enabled: false });
+        assert(panel.hidden, "Désactivation");
+        output.textContent = "PASS Suggestions, filtrage, insertion et désactivation";
+      } catch (error) {
+        output.textContent = "FAIL " + error.message;
+      } finally {
+        editor.remove();
+        changeSettings(defaults);
+      }
+    });
+  </script>
 </body>
 </html>
