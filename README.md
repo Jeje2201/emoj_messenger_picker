@@ -1,54 +1,56 @@
 # Messenger Emoji
 
-Extension Chrome Manifest V3 qui remplace les raccourcis pendant la saisie sur **https://www.messenger.com/** uniquement.
+[Français](README.fr.md) | [English](README.md)
+
+A Chrome Manifest V3 extension that replaces shortcuts as you type, only on **https://www.messenger.com/**.
 
 ## Installation
 
-1. Ouvrir `chrome://extensions` dans Chrome.
-2. Activer **Mode developpeur**.
-3. Cliquer sur **Charger l'extension non empaquetee**.
-4. Selectionner le dossier `extension` de ce projet, pas le dossier parent.
-5. Recharger l'onglet Messenger deja ouvert.
-6. Epingler l'extension dans le menu des extensions pour acceder aux reglages.
+1. Open `chrome://extensions` in Chrome.
+2. Enable **Developer mode**.
+3. Click **Load unpacked**.
+4. Select this project's `extension` folder, not its parent folder.
+5. Reload any open Messenger tab.
+6. Pin the extension from the extensions menu to access its settings.
 
-Pas de compilation ni de dependances a installer.
+No build or dependencies are required.
 
-## Apres une mise a jour ou si le remplacement ne fonctionne pas
+## After an update or if replacement does not work
 
-1. Dans `chrome://extensions`, cliquer sur le bouton **Recharger** de Messenger Emoji.
-2. Recharger ensuite l'onglet **https://www.messenger.com/** pour remplacer l'ancien script injecte.
-3. Ouvrir les reglages depuis l'icone de l'extension dans Chrome, pas depuis le fichier HTML d'apercu.
-4. Verifier que le remplacement automatique est active, puis cliquer sur **Enregistrer**.
-5. Taper `:sob:` dans une conversation. Le raccourci doit devenir un emoji sans envoyer le message.
+1. In `chrome://extensions`, click the **Reload** button for Messenger Emoji.
+2. Reload the **https://www.messenger.com/** tab to replace the previously injected script.
+3. Open the settings from the extension icon in Chrome, not from the HTML preview file.
+4. Check that automatic replacement is enabled, then click **Enregistrer** (Save).
+5. Type `:sob:` in a conversation. The shortcut should become an emoji without sending the message.
 
-## Raccourcis et reglages
+## Shortcuts and settings
 
-Par defaut : `:cwl:` pour rire aux larmes, `:sob:` pour pleurer, `:heart:` pour un coeur, `:smile:` pour un sourire et `:thumbsup:` pour un pouce leve.
+By default: `:cwl:` for laughing with tears, `:sob:` for crying, `:heart:` for a heart, `:smile:` for a smile, and `:thumbsup:` for a thumbs-up.
 
-Cliquer sur l'icone de l'extension pour ajouter, modifier ou supprimer les associations **Texte / Emoji**, puis **Enregistrer**. Les emoji peuvent etre colles ou choisis avec le panneau Windows **Win + .**. Le commutateur permet de desactiver le remplacement ; enregistrer aussi ce changement. Les reglages s'appliquent aux onglets Messenger ouverts sans rechargement.
+Click the extension icon to add, edit, or delete **Texte / Emoji** (Text / Emoji) mappings, then click **Enregistrer** (Save). Emoji can be pasted or selected using the Windows emoji panel with **Win + .**. The switch disables replacement; save that change too. Settings apply to open Messenger tabs without reloading.
 
-Les raccourcis sont litteraux et sensibles a la casse. Ils sont remplaces des que leur dernier caractere est tape. Preferer une notation telle que `:sob:` pour eviter de remplacer le debut d'un mot plus long. Le collage et les champs de recherche ne sont pas modifies. Aucun message n'est envoye par l'extension.
+Shortcuts are literal and case-sensitive. They are replaced as soon as their last character is typed. Prefer a format such as `:sob:` to avoid replacing the beginning of a longer word. Pasted content and search fields are not modified. The extension does not send messages.
 
-Dans l'editeur de message, taper `:` affiche les associations configurees commencant par `:` ; continuer a taper filtre les suggestions selon le debut du raccourci. Cliquer sur une suggestion remplace la partie saisie par son emoji. La touche Tab permet aussi de parcourir les suggestions et Entree de choisir ; Echap ferme le bandeau. Si le remplacement est desactive, les suggestions le sont aussi.
+In the message editor, typing `:` displays configured mappings that start with `:`; continue typing to filter suggestions by shortcut prefix. Click a suggestion to replace the typed prefix with its emoji. Tab can also be used to navigate suggestions, Enter to select one, and Escape to close the panel. Disabling replacement also disables suggestions.
 
-Les anciennes associations entre parentheses, y compris les associations personnalisees, sont converties en deux-points a la lecture des reglages. Si les deux formes existent deja, l'association avec deux-points est conservee. La conversion est enregistree lorsque les reglages sont sauvegardes ; les nouveaux raccourcis personnalises restent libres.
+Legacy mappings enclosed in parentheses, including custom mappings, are converted to colons when settings are read. If both forms already exist, the colon mapping is kept. The conversion is saved when settings are saved; new custom shortcuts remain unrestricted.
 
-## Confidentialite
+## Privacy
 
-Seule permission supplementaire : `storage`. Les associations restent dans le stockage local de Chrome. Aucun serveur, aucune telemetrie, aucun acces aux autres sites. Le script ne lit que le texte situe avant le curseur dans l'editeur actif, au moment de la saisie.
+The only additional permission is `storage`. Mappings remain in Chrome's local storage. There is no server, telemetry, or access to other sites. The script reads only the text before the cursor in the active editor while typing.
 
 ## Verification
 
-Ouvrir `tests/browser.html` dans un navigateur pour les tests du moteur et un editeur de test. Le bouton **Tester les suggestions** verifie leur affichage, leur filtrage, l'insertion et la desactivation. Les tests du moteur peuvent aussi etre lances avec Node.js 18 ou plus :
+Open `tests/browser.html` in a browser for the engine tests and a test editor. The **Tester les suggestions** (Test suggestions) button checks suggestion display, filtering, insertion, and disabling. Engine tests can also be run with Node.js 18 or later:
 
 ```sh
 node --test tests/rules.test.cjs
 ```
 
-Pour verifier dans Messenger : taper `:` puis `c`, choisir une suggestion a la souris, puis taper `Bonjour :sob:`. Ajouter une association, enregistrer, la tester sans recharger, puis desactiver et enregistrer. Verifier aussi que le message envoye contient bien l'emoji et que Ctrl+Z reste utilisable. Messenger peut faire evoluer son editeur : une verification dans un compte connecte reste necessaire apres ses mises a jour.
+To check in Messenger: type `:` followed by `c`, select a suggestion with the mouse, then type `Hello :sob:`. Add a mapping, save it, test it without reloading, then disable replacement and save. Also check that the sent message contains the emoji and that Ctrl+Z still works. Messenger may change its editor, so checking with a signed-in account remains necessary after its updates.
 
-`extension/options.html` peut etre ouvert directement pour un apercu de l'interface. Cet apercu utilise un stockage distinct et ne configure pas l'extension installee.
+`extension/options.html` can be opened directly to preview the interface. This preview uses separate storage and does not configure the installed extension.
 
-## Icones
+## Icons
 
-Icones Lucide sous licence ISC, conservee dans `extension/icons/LICENSE`.
+Lucide icons under the ISC license, preserved in `extension/icons/LICENSE`.

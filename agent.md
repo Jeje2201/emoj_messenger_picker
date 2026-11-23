@@ -11,10 +11,10 @@ ce guide. Ne pas laisser des instructions ou des exemples devenus obsolètes.
 
 Avant de modifier le projet, lire ce guide, le `README.md` et les fichiers
 concernés. Vérifier l'état du dépôt et préserver les changements préexistants.
-Faire des modifications ciblées, suivre les conventions existantes et mettre
-à jour également le `README.md` si le comportement destiné aux utilisateurs
-change. Ne pas ajouter de dépendance ou de processus de compilation sans
-nécessité.
+Faire des modifications ciblées, suivre les conventions existantes et maintenir
+les deux guides utilisateurs, `README.md` (anglais, par défaut) et
+`README.fr.md` (français), cohérents lorsque le comportement ou la documentation change. Ne
+pas ajouter de dépendance ou de processus de compilation sans nécessité.
 
 ## Objectif et fonctionnement
 
