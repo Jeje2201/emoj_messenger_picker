@@ -4,7 +4,7 @@
 
 A Chrome Manifest V3 extension that replaces shortcuts as you type, only on **https://www.messenger.com/**.
 
-<img width="559" height="181" alt="Sans titre 1" src="https://github.com/user-attachments/assets/12afed7a-234e-4a07-9a4d-ca2078671bff" />
+<img width="654" height="190" alt="emojipicker" src="https://github.com/user-attachments/assets/8a8ed720-dd12-4c4e-bde5-74321b2447ab" />
 
 ## Installation
 
