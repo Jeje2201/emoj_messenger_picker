@@ -70,9 +70,20 @@
       editor.setAttribute("aria-multiline", "true");
       document.body.append(editor);
       const wait = () => new Promise((resolve) => setTimeout(resolve, 0));
+      const pressKey = (target, key, options = {}) => {
+        const event = new KeyboardEvent("keydown", {
+          key, bubbles: true, cancelable: true, ...options
+        });
+        target.dispatchEvent(event);
+        return event;
+      };
       const assert = (condition, message) => {
         if (!condition) throw new Error(message);
       };
+      let editorEnterCount = 0;
+      editor.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") editorEnterCount += 1;
+      });
       try {
         editor.focus();
         assert(document.execCommand("insertText", false, ":"), "Saisie de : impossible");
@@ -85,13 +96,57 @@
         assert(buttons.length === 1 && buttons[0].textContent.includes(":cwl:"), "Filtrage");
         buttons[0].click();
         assert(editor.textContent === "\uD83D\uDE02" && panel.hidden, "Insertion par clic");
+
+        editor.textContent = "";
+        editor.focus();
+        assert(document.execCommand("insertText", false, ":s"), "Saisie de :s impossible");
+        await wait();
+        assert(!panel.hidden && panel.querySelectorAll("button").length === 2, "Suggestions pour :s");
+        const enterOnOpen = pressKey(editor, "Enter");
+        assert(enterOnOpen.defaultPrevented && editorEnterCount === 0, "Entrée ne doit pas envoyer le message");
+        assert(editor.textContent === "\uD83D\uDE2D" && panel.hidden, "Validation du premier emoji par Entrée");
+
+        const enterWhenClosed = pressKey(editor, "Enter");
+        assert(!enterWhenClosed.defaultPrevented && editorEnterCount === 1, "Entrée normale hors bandeau");
+
+        editor.textContent = "";
+        editorEnterCount = 0;
+        editor.focus();
+        assert(document.execCommand("insertText", false, ":h"), "Saisie rapide de :h impossible");
+        const fastEnter = pressKey(editor, "Enter");
+        assert(fastEnter.defaultPrevented && editorEnterCount === 0 &&
+          editor.textContent === "\u2764\uFE0F" && panel.hidden, "Validation immédiate par Entrée");
+
+        editor.textContent = "";
+        editor.focus();
+        assert(document.execCommand("insertText", false, ":s"), "Saisie de :s pour Shift+Entrée impossible");
+        await wait();
+        const shiftEnter = pressKey(editor, "Enter", { shiftKey: true });
+        assert(!shiftEnter.defaultPrevented && editorEnterCount === 1, "Shift+Entrée préservé");
+
+        const escapeEvent = pressKey(editor, "Escape");
+        assert(escapeEvent.defaultPrevented && panel.hidden, "Fermeture par Échap");
+        const enterAfterEscape = pressKey(editor, "Enter");
+        assert(!enterAfterEscape.defaultPrevented && editorEnterCount === 2, "Entrée après Échap autorisée");
+
+        editor.textContent = "";
+        editorEnterCount = 0;
+        editor.focus();
+        assert(document.execCommand("insertText", false, ":s"), "Saisie de :s pour Tab impossible");
+        await wait();
+        const secondButton = panel.querySelectorAll("button")[1];
+        secondButton.focus();
+        const enterOnFocusedButton = pressKey(secondButton, "Enter");
+        assert(enterOnFocusedButton.defaultPrevented && editorEnterCount === 0 &&
+          editor.textContent === "\uD83D\uDE0A" && panel.hidden, "Validation du bouton ciblé par Tab+Entrée");
+
         editor.textContent = "";
         editor.focus();
         assert(document.execCommand("insertText", false, ":"), "Nouvelle saisie impossible");
         await wait();
         changeSettings({ ...defaults, enabled: false });
         assert(panel.hidden, "Désactivation");
-        output.textContent = "PASS Suggestions, filtrage, insertion et désactivation";
+        output.textContent = "PASS Suggestions, filtrage, validation par Entrée, clic et désactivation";
       } catch (error) {
         output.textContent = "FAIL " + error.message;
       } finally {

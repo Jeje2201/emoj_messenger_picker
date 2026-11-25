@@ -31,7 +31,7 @@ Cliquer sur l'icone de l'extension pour ajouter, modifier ou supprimer les assoc
 
 Les raccourcis sont litteraux et sensibles a la casse. Ils sont remplaces des que leur dernier caractere est tape. Preferer une notation telle que `:sob:` pour eviter de remplacer le debut d'un mot plus long. Le collage et les champs de recherche ne sont pas modifies. Aucun message n'est envoye par l'extension.
 
-Dans l'editeur de message, taper `:` affiche les associations configurees commencant par `:` ; continuer a taper filtre les suggestions selon le debut du raccourci. Cliquer sur une suggestion remplace la partie saisie par son emoji. La touche Tab permet aussi de parcourir les suggestions et Entree de choisir ; Echap ferme le bandeau. Si le remplacement est desactive, les suggestions le sont aussi.
+Dans l'editeur de message, taper `:` affiche les associations configurees commencant par `:` ; continuer a taper filtre les suggestions selon le debut du raccourci. Tant que le bandeau de suggestions est ouvert, appuyer sur Entree insere directement le premier emoji propose au lieu d'envoyer le message (`Shift+Entree` conserve le retour a la ligne), et cliquer sur une suggestion remplace aussi la partie saisie par son emoji. La touche Tab permet egalement de parcourir les suggestions avant de valider avec Entree, et Echap ferme le bandeau. Si le remplacement est desactive, les suggestions le sont aussi.
 
 Les anciennes associations entre parentheses, y compris les associations personnalisees, sont converties en deux-points a la lecture des reglages. Si les deux formes existent deja, l'association avec deux-points est conservee. La conversion est enregistree lorsque les reglages sont sauvegardes ; les nouveaux raccourcis personnalises restent libres.
 
@@ -41,13 +41,13 @@ Seule permission supplementaire : `storage`. Les associations restent dans le st
 
 ## Verification
 
-Ouvrir `tests/browser.html` dans un navigateur pour les tests du moteur et un editeur de test. Le bouton **Tester les suggestions** verifie leur affichage, leur filtrage, l'insertion et la desactivation. Les tests du moteur peuvent aussi etre lances avec Node.js 18 ou plus :
+Ouvrir `tests/browser.html` dans un navigateur pour les tests du moteur et un editeur de test. Le bouton **Tester les suggestions** verifie leur affichage, leur filtrage, la validation par Entree ou par clic et la desactivation. Les tests du moteur peuvent aussi etre lances avec Node.js 18 ou plus :
 
 ```sh
 node --test tests/rules.test.cjs
 ```
 
-Pour verifier dans Messenger : taper `:` puis `c`, choisir une suggestion a la souris, puis taper `Bonjour :sob:`. Ajouter une association, enregistrer, la tester sans recharger, puis desactiver et enregistrer. Verifier aussi que le message envoye contient bien l'emoji et que Ctrl+Z reste utilisable. Messenger peut faire evoluer son editeur : une verification dans un compte connecte reste necessaire apres ses mises a jour.
+Pour verifier dans Messenger : taper `:` puis `c`, appuyer sur Entree (ou choisir une suggestion a la souris) en verifiant que l'emoji est insere sans envoyer le message, puis taper `Bonjour :sob:`. Ajouter une association, enregistrer, la tester sans recharger, puis desactiver et enregistrer. Verifier aussi que le message envoye contient bien l'emoji et que Ctrl+Z reste utilisable. Messenger peut faire evoluer son editeur : une verification dans un compte connecte reste necessaire apres ses mises a jour.
 
 `extension/options.html` peut etre ouvert directement pour un apercu de l'interface. Cet apercu utilise un stockage distinct et ne configure pas l'extension installee.
 

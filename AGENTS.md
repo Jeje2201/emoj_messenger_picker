@@ -2,7 +2,7 @@
 
 ## Règle obligatoire de maintenance
 
-Toute modification du projet doit inclure une mise à jour de `agent.md` dans le
+Toute modification du projet doit inclure une mise à jour de `AGENTS.md` dans le
 même ensemble de changements. Vérifier l'ensemble de ce guide et adapter les
 sections concernées à l'état réel du projet : architecture, comportement,
 commandes, tests, permissions et documentation. Si aucune description existante
@@ -32,9 +32,12 @@ associations par défaut sont `:cwl:`, `:sob:`, `:heart:`, `:smile:` et
 `:thumbsup:`.
 Dans l'éditeur de message, `:` ouvre un bandeau des associations configurées
 commençant par `:` ; la saisie filtre les raccourcis par préfixe, et un clic
-remplace uniquement le préfixe avant le curseur. Échap ferme le bandeau. Les
-touches Tab et Entrée permettent également de sélectionner une suggestion ; les
-suggestions suivent le commutateur de remplacement et les changements de réglages.
+remplace uniquement le préfixe avant le curseur. Lorsque le bandeau est ouvert,
+appuyer sur Entrée depuis l'éditeur valide directement la première suggestion
+affichée au lieu d'envoyer le message (`Shift+Entrée` reste libre pour le retour
+à la ligne). La touche Tab permet aussi de parcourir les suggestions puis de
+valider le bouton ciblé avec Entrée, et Échap ferme le bandeau. Les suggestions
+suivent le commutateur de remplacement et les changements de réglages.
 
 ## Organisation
 
@@ -99,11 +102,12 @@ Selon les fichiers modifiés :
    règles. Ajouter des tests ciblés si leur comportement change.
 2. Ouvrir `tests/browser.html` dans un navigateur : vérifier les résultats
    affichés et exercer l'éditeur de test pour les changements de saisie, de
-   filtrage des suggestions et de sélection à la souris.
-3. Vérifier dans Messenger connecté : saisir un raccourci, modifier et
-   enregistrer une association sans recharger, puis désactiver et enregistrer.
-   Vérifier aussi l'envoi du texte remplacé et `Ctrl+Z`. Tester les champs de
-   recherche, le collage et la composition si la saisie est concernée.
+   filtrage des suggestions, de validation par Entrée et de sélection à la souris.
+3. Vérifier dans Messenger connecté : saisir un raccourci ou valider une
+   suggestion avec Entrée sans envoyer le message, modifier et enregistrer une
+   association sans recharger, puis désactiver et enregistrer. Vérifier aussi
+   l'envoi du texte remplacé et `Ctrl+Z`. Tester les champs de recherche, le
+   collage et la composition si la saisie est concernée.
 4. Pour l'interface, vérifier également la validation, les erreurs, les
    modifications non enregistrées et, si pertinent, l'aperçu direct.
 

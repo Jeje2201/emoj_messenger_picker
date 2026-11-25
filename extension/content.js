@@ -195,8 +195,27 @@
     }
   }, true);
   document.addEventListener("keydown", (event) => {
-    if (!replacing && !event.isComposing && event.key === "Enter" && !panel.contains(event.target)) {
+    if (!replacing && !event.isComposing && !composing && event.key === "Enter") {
+      if (panel.contains(event.target)) {
+        if (!panel.hidden && !event.shiftKey && !event.ctrlKey && !event.altKey &&
+            !event.metaKey && event.target instanceof HTMLButtonElement) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          event.target.click();
+        }
+        return;
+      }
       flushReplacement();
+      if (!panel.hidden && !event.shiftKey && !event.ctrlKey && !event.altKey &&
+          !event.metaKey && editorFor(event.target) === suggestionEditor) {
+        const firstButton = panel.querySelector("button");
+        if (firstButton) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          firstButton.click();
+        }
+        return;
+      }
     }
     if (event.key === "Escape" && !panel.hidden) {
       event.preventDefault();

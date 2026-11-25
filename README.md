@@ -33,7 +33,7 @@ Click the extension icon to add, edit, or delete **Texte / Emoji** (Text / Emoji
 
 Shortcuts are literal and case-sensitive. They are replaced as soon as their last character is typed. Prefer a format such as `:sob:` to avoid replacing the beginning of a longer word. Pasted content and search fields are not modified. The extension does not send messages.
 
-In the message editor, typing `:` displays configured mappings that start with `:`; continue typing to filter suggestions by shortcut prefix. Click a suggestion to replace the typed prefix with its emoji. Tab can also be used to navigate suggestions, Enter to select one, and Escape to close the panel. Disabling replacement also disables suggestions.
+In the message editor, typing `:` displays configured mappings that start with `:`; continue typing to filter suggestions by shortcut prefix. While the suggestion panel is open, pressing Enter inserts the first matching emoji instead of sending the message (`Shift+Enter` still inserts a line break), and clicking a suggestion also replaces the typed prefix with its emoji. Tab can be used to navigate suggestions before pressing Enter, and Escape closes the panel. Disabling replacement also disables suggestions.
 
 Legacy mappings enclosed in parentheses, including custom mappings, are converted to colons when settings are read. If both forms already exist, the colon mapping is kept. The conversion is saved when settings are saved; new custom shortcuts remain unrestricted.
 
@@ -43,13 +43,13 @@ The only additional permission is `storage`. Mappings remain in Chrome's local s
 
 ## Verification
 
-Open `tests/browser.html` in a browser for the engine tests and a test editor. The **Tester les suggestions** (Test suggestions) button checks suggestion display, filtering, insertion, and disabling. Engine tests can also be run with Node.js 18 or later:
+Open `tests/browser.html` in a browser for the engine tests and a test editor. The **Tester les suggestions** (Test suggestions) button checks suggestion display, filtering, Enter and click insertion, and disabling. Engine tests can also be run with Node.js 18 or later:
 
 ```sh
 node --test tests/rules.test.cjs
 ```
 
-To check in Messenger: type `:` followed by `c`, select a suggestion with the mouse, then type `Hello :sob:`. Add a mapping, save it, test it without reloading, then disable replacement and save. Also check that the sent message contains the emoji and that Ctrl+Z still works. Messenger may change its editor, so checking with a signed-in account remains necessary after its updates.
+To check in Messenger: type `:` followed by `c`, press Enter (or select a suggestion with the mouse) and confirm the emoji is inserted without sending the message, then type `Hello :sob:`. Add a mapping, save it, test it without reloading, then disable replacement and save. Also check that the sent message contains the emoji and that Ctrl+Z still works. Messenger may change its editor, so checking with a signed-in account remains necessary after its updates.
 
 `extension/options.html` can be opened directly to preview the interface. This preview uses separate storage and does not configure the installed extension.
 
