@@ -2,6 +2,8 @@
   "use strict";
 
   const { normalizeSettings, findReplacement, findSuggestions } = globalThis.MessengerEmojiRules;
+  const maximumVisibleSuggestions = 40;
+  const getMessage = (key, fallback) => chrome.i18n?.getMessage(key) || fallback;
   let settings = { enabled: false, mappings: [] };
   let replacing = false;
   let composing = false;
@@ -14,7 +16,7 @@
   let dismissed = false;
   const panel = document.createElement("div");
   panel.className = "messenger-emoji-suggestions";
-  panel.setAttribute("aria-label", "Suggestions d'emoji");
+  panel.setAttribute("aria-label", getMessage("suggestionsPanelLabel", "Emoji suggestions"));
   panel.hidden = true;
   document.documentElement.append(panel);
 
@@ -89,7 +91,7 @@
       if (!document.execCommand("insertText", false, emoji)) {
         selection.removeAllRanges();
         selection.addRange(caret);
-        console.error("Messenger Emoji : insertion impossible.");
+        console.error(getMessage("insertFailed", "Messenger Emoji: text insertion failed."));
       }
     } finally {
       replacing = false;
@@ -131,7 +133,8 @@
     }
     suggestionEditor = editor;
     suggestionCaret = context.caret.cloneRange();
-    const buttons = suggestions.mappings.map((mapping) => {
+    const visibleMappings = suggestions.mappings.slice(0, maximumVisibleSuggestions);
+    const buttons = visibleMappings.map((mapping) => {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "messenger-emoji-suggestion";
@@ -162,6 +165,12 @@
       });
       return button;
     });
+    if (suggestions.mappings.length > visibleMappings.length) {
+      const hint = document.createElement("div");
+      hint.className = "messenger-emoji-suggestion-hint";
+      hint.textContent = getMessage("suggestionFilterHint", "Type more to filter suggestions.");
+      buttons.push(hint);
+    }
     panel.replaceChildren(...buttons);
     panel.hidden = false;
     positionSuggestions();

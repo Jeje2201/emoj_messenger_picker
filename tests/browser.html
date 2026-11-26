@@ -146,6 +146,18 @@
         await wait();
         changeSettings({ ...defaults, enabled: false });
         assert(panel.hidden, "Désactivation");
+        changeSettings({ enabled: true, mappings: Array.from({ length: 50 }, (_, index) => ({
+          shortcut: `:bulk_${index}:`, emoji: "x"
+        })) });
+        editor.textContent = "";
+        editor.focus();
+        assert(document.execCommand("insertText", false, ":"), "Suggestions volumineuses");
+        await wait();
+        assert(panel.querySelectorAll("button").length === 40 &&
+          panel.textContent.includes("Type more to filter"), "Limite des suggestions volumineuses");
+        assert(document.execCommand("insertText", false, "bulk_49"), "Filtrage des suggestions volumineuses");
+        await wait();
+        assert(panel.querySelectorAll("button").length === 1, "Filtrage après import");
         output.textContent = "PASS Suggestions, filtrage, validation par Entrée, clic et désactivation";
       } catch (error) {
         output.textContent = "FAIL " + error.message;

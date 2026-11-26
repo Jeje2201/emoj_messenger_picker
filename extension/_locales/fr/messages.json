@@ -1,0 +1,167 @@
+{
+  "extensionName": {
+    "message": "Messenger Emoji"
+  },
+  "extensionDescription": {
+    "message": "Des raccourcis emoji personnalisables, uniquement sur Messenger Web."
+  },
+  "htmlLang": {
+    "message": "fr"
+  },
+  "heading": {
+    "message": "Mes raccourcis emoji"
+  },
+  "activation": {
+    "message": "Remplacement automatique"
+  },
+  "mappingsTitle": {
+    "message": "Mes associations"
+  },
+  "addMapping": {
+    "message": "Ajouter une association"
+  },
+  "searchMappings": {
+    "message": "Rechercher dans mes associations"
+  },
+  "searchPlaceholder": {
+    "message": "Raccourci ou emoji"
+  },
+  "columnText": {
+    "message": "Texte"
+  },
+  "columnEmoji": {
+    "message": "Emoji"
+  },
+  "noMappings": {
+    "message": "Aucune association."
+  },
+  "noSearchResults": {
+    "message": "Aucun résultat."
+  },
+  "refreshCatalog": {
+    "message": "Actualiser le catalogue"
+  },
+  "importMissing": {
+    "message": "Importer les emojis manquants"
+  },
+  "catalogLoading": {
+    "message": "Chargement du catalogue..."
+  },
+  "catalogCredit": {
+    "message": "Catalogue Unicode Emoji. Vos associations restent sur cet appareil."
+  },
+  "resetDefaults": {
+    "message": "Rétablir les associations par défaut"
+  },
+  "clearAllTitle": {
+    "message": "Supprimer toutes les associations"
+  },
+  "clearAllButton": {
+    "message": "Tout vider"
+  },
+  "statusLoading": {
+    "message": "Chargement..."
+  },
+  "save": {
+    "message": "Enregistrer"
+  },
+  "shortcutInputLabel": {
+    "message": "Texte du raccourci"
+  },
+  "emojiInputLabel": {
+    "message": "Emoji de remplacement"
+  },
+  "deleteMapping": {
+    "message": "Supprimer cette association"
+  },
+  "statusUnsaved": {
+    "message": "Modifications non enregistrées"
+  },
+  "shortcutRequired": {
+    "message": "Saisissez un raccourci."
+  },
+  "shortcutDuplicate": {
+    "message": "Ce raccourci existe déjà."
+  },
+  "emojiRequired": {
+    "message": "Saisissez un emoji."
+  },
+  "confirmReset": {
+    "message": "Rétablir les associations par défaut ?"
+  },
+  "confirmClearAll": {
+    "message": "Supprimer toutes les associations, y compris celles importées ? L’activation et le catalogue Unicode seront conservés."
+  },
+  "catalogRefreshing": {
+    "message": "Actualisation du catalogue Unicode..."
+  },
+  "catalogInfo": {
+    "message": "Catalogue Unicode $1 : $2 emojis."
+  },
+  "catalogUpdated": {
+    "message": "Actualisé."
+  },
+  "catalogRefreshErrorCached": {
+    "message": "Actualisation impossible ; la copie locale ($1) est conservée."
+  },
+  "catalogRefreshErrorNoCache": {
+    "message": "Catalogue indisponible. Vérifiez votre connexion puis réessayez."
+  },
+  "catalogRefreshLog": {
+    "message": "Messenger Emoji : actualisation du catalogue impossible."
+  },
+  "catalogImportSummary": {
+    "message": "$1 ajouté(s), $2 déjà présent(s), $3 conflit(s) de raccourci."
+  },
+  "catalogConflictSummary": {
+    "message": " Raccourcis en conflit : $1"
+  },
+  "catalogMoreConflicts": {
+    "message": ", et d’autres."
+  },
+  "catalogSaveAfterImport": {
+    "message": " Enregistrez pour conserver l’import."
+  },
+  "previewMode": {
+    "message": "Aperçu local"
+  },
+  "catalogInvalid": {
+    "message": "Catalogue Unicode invalide."
+  },
+  "catalogVersionMissing": {
+    "message": "Version du catalogue Unicode introuvable."
+  },
+  "catalogTooManyEntries": {
+    "message": "Le catalogue Unicode contient trop d’entrées."
+  },
+  "catalogNoEmoji": {
+    "message": "Aucun emoji reconnu dans le catalogue Unicode."
+  },
+  "saved": {
+    "message": "Enregistré"
+  },
+  "previewSaved": {
+    "message": "Aperçu local enregistré"
+  },
+  "saveError": {
+    "message": "Enregistrement impossible. Réessayez."
+  },
+  "previewCatalogUnavailable": {
+    "message": "Le catalogue est disponible dans l’extension installée."
+  },
+  "catalogRecentlyUpdated": {
+    "message": "Actualisé récemment."
+  },
+  "settingsLoadError": {
+    "message": "Chargement impossible. Rouvrez l’extension."
+  },
+  "suggestionsPanelLabel": {
+    "message": "Suggestions d’emoji"
+  },
+  "suggestionFilterHint": {
+    "message": "Continuez à taper pour filtrer les suggestions."
+  },
+  "insertFailed": {
+    "message": "Messenger Emoji : insertion du texte impossible."
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "extensionName": {
+    "message": "Messenger Emoji"
+  },
+  "extensionDescription": {
+    "message": "Customizable emoji shortcuts for Messenger Web."
+  },
+  "htmlLang": {
+    "message": "en"
+  },
+  "heading": {
+    "message": "My emoji shortcuts"
+  },
+  "activation": {
+    "message": "Automatic replacement"
+  },
+  "mappingsTitle": {
+    "message": "My mappings"
+  },
+  "addMapping": {
+    "message": "Add a mapping"
+  },
+  "searchMappings": {
+    "message": "Search my mappings"
+  },
+  "searchPlaceholder": {
+    "message": "Shortcut or emoji"
+  },
+  "columnText": {
+    "message": "Text"
+  },
+  "columnEmoji": {
+    "message": "Emoji"
+  },
+  "noMappings": {
+    "message": "No mappings."
+  },
+  "noSearchResults": {
+    "message": "No matches."
+  },
+  "refreshCatalog": {
+    "message": "Refresh catalogue"
+  },
+  "importMissing": {
+    "message": "Import missing emojis"
+  },
+  "catalogLoading": {
+    "message": "Loading catalogue..."
+  },
+  "catalogCredit": {
+    "message": "Unicode Emoji catalogue. Your mappings stay on this device."
+  },
+  "resetDefaults": {
+    "message": "Restore default mappings"
+  },
+  "clearAllTitle": {
+    "message": "Delete all mappings"
+  },
+  "clearAllButton": {
+    "message": "Clear all"
+  },
+  "statusLoading": {
+    "message": "Loading..."
+  },
+  "save": {
+    "message": "Save"
+  },
+  "shortcutInputLabel": {
+    "message": "Shortcut text"
+  },
+  "emojiInputLabel": {
+    "message": "Replacement emoji"
+  },
+  "deleteMapping": {
+    "message": "Delete mapping"
+  },
+  "statusUnsaved": {
+    "message": "Unsaved changes"
+  },
+  "shortcutRequired": {
+    "message": "Enter a shortcut."
+  },
+  "shortcutDuplicate": {
+    "message": "This shortcut already exists."
+  },
+  "emojiRequired": {
+    "message": "Enter an emoji."
+  },
+  "confirmReset": {
+    "message": "Restore the default mappings?"
+  },
+  "confirmClearAll": {
+    "message": "Delete all mappings, including imported emojis? Your replacement setting and Unicode catalogue will be kept."
+  },
+  "catalogRefreshing": {
+    "message": "Refreshing the Unicode catalogue..."
+  },
+  "catalogInfo": {
+    "message": "Unicode catalogue $1: $2 emojis."
+  },
+  "catalogUpdated": {
+    "message": "Updated."
+  },
+  "catalogRefreshErrorCached": {
+    "message": "Could not update; the local copy ($1) was kept."
+  },
+  "catalogRefreshErrorNoCache": {
+    "message": "Catalogue unavailable. Check your connection and try again."
+  },
+  "catalogRefreshLog": {
+    "message": "Messenger Emoji: could not refresh the catalogue."
+  },
+  "catalogImportSummary": {
+    "message": "$1 added, $2 already present, $3 shortcut conflict(s)."
+  },
+  "catalogConflictSummary": {
+    "message": " Conflicting shortcuts: $1"
+  },
+  "catalogMoreConflicts": {
+    "message": ", and others."
+  },
+  "catalogSaveAfterImport": {
+    "message": " Save to keep the import."
+  },
+  "previewMode": {
+    "message": "Local preview"
+  },
+  "catalogInvalid": {
+    "message": "Invalid Unicode catalogue."
+  },
+  "catalogVersionMissing": {
+    "message": "Unicode catalogue version not found."
+  },
+  "catalogTooManyEntries": {
+    "message": "The Unicode catalogue has too many entries."
+  },
+  "catalogNoEmoji": {
+    "message": "No emoji found in the Unicode catalogue."
+  },
+  "saved": {
+    "message": "Saved"
+  },
+  "previewSaved": {
+    "message": "Local preview saved"
+  },
+  "saveError": {
+    "message": "Could not save. Try again."
+  },
+  "previewCatalogUnavailable": {
+    "message": "The catalogue is available in the installed extension."
+  },
+  "catalogRecentlyUpdated": {
+    "message": "Recently updated."
+  },
+  "settingsLoadError": {
+    "message": "Could not load settings. Reopen the extension."
+  },
+  "suggestionsPanelLabel": {
+    "message": "Emoji suggestions"
+  },
+  "suggestionFilterHint": {
+    "message": "Type more to filter suggestions."
+  },
+  "insertFailed": {
+    "message": "Messenger Emoji: text insertion failed."
+  }
+}

@@ -43,16 +43,17 @@
 
   function findReplacement(text, settings) {
     if (!settings.enabled) return null;
-    const mappings = [...settings.mappings].sort((first, second) =>
-      second.shortcut.length - first.shortcut.length);
-    for (const mapping of mappings) {
+    let match = null;
+    for (const mapping of settings.mappings) {
       if (!text.endsWith(mapping.shortcut)) continue;
       const start = text.length - mapping.shortcut.length;
       if (/^[\p{L}\p{N}_]/u.test(mapping.shortcut) && start > 0 &&
           /[\p{L}\p{N}_]/u.test(text[start - 1])) continue;
-      return { start, length: mapping.shortcut.length, emoji: mapping.emoji };
+      if (!match || mapping.shortcut.length > match.length) {
+        match = { start, length: mapping.shortcut.length, emoji: mapping.emoji };
+      }
     }
-    return null;
+    return match;
   }
 
   function findSuggestions(text, settings) {

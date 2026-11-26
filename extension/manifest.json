@@ -1,11 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "Messenger Emoji",
+  "name": "__MSG_extensionName__",
   "version": "1.0.0",
-  "description": "Des raccourcis emoji personnalisables, uniquement sur Messenger Web.",
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "en",
   "permissions": ["storage"],
+  "host_permissions": ["https://unicode.org/*"],
   "action": {
-    "default_title": "Messenger Emoji",
+    "default_title": "__MSG_extensionName__",
     "default_popup": "options.html"
   },
   "options_page": "options.html",

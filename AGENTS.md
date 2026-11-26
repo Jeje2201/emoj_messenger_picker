@@ -37,14 +37,24 @@ appuyer sur Entrée depuis l'éditeur valide directement la première suggestion
 affichée au lieu d'envoyer le message (`Shift+Entrée` reste libre pour le retour
 à la ligne). La touche Tab permet aussi de parcourir les suggestions puis de
 valider le bouton ciblé avec Entrée, et Échap ferme le bandeau. Les suggestions
-suivent le commutateur de remplacement et les changements de réglages.
+suivent le commutateur de remplacement et les changements de réglages ; au plus
+40 sont affichées à la fois, et la saisie d'un préfixe plus long les filtre.
 
 ## Organisation
 
-- `extension/manifest.json` : permission `storage`, popup et page d'options,
-  et injection de `rules.js` puis `content.js` sur Messenger à `document_idle`.
+- `extension/manifest.json` : locale par défaut anglaise, permission `storage`,
+  accès réseau limité à `unicode.org` pour le catalogue public, popup et page
+  d'options, et injection de `rules.js` puis `content.js` sur Messenger à
+  `document_idle`.
+- `extension/_locales/en/messages.json` et `extension/_locales/fr/messages.json` :
+  messages de l'interface et du bandeau de suggestions. Chrome choisit selon sa
+  langue d'affichage et revient à l'anglais si aucune traduction n'est trouvée.
 - `extension/rules.js` : valeurs par défaut, normalisation des réglages et
   recherche de remplacements et de suggestions ; API globale `MessengerEmojiRules`, également
+  exportée en CommonJS pour les tests Node.
+- `extension/catalog.js` : lecture du fichier public Unicode Emoji, validation
+  du cache local et import groupé des emojis non associés sans écraser les
+  raccourcis ou emojis existants ; API globale `MessengerEmojiCatalog`, également
   exportée en CommonJS pour les tests Node.
 - `extension/content.js` : écoute de la saisie et des changements de stockage,
   sélection de l'éditeur et remplacement au curseur. L'éditeur doit être un
@@ -52,14 +62,22 @@ suivent le commutateur de remplacement et les changements de réglages.
   est différé après l'événement de saisie et utilise `execCommand("insertText")`
   pour s'intégrer à l'édition et à l'annulation du navigateur. Il gère également
   le bandeau de suggestions, positionné près de l'éditeur et mis à jour selon
-  la sélection, la saisie et les réglages.
+  la sélection, la saisie et les réglages ; les textes visibles y utilisent
+  `chrome.i18n`.
 - `extension/content.css` : styles du bandeau injectés sur Messenger par le
   manifest et chargés également dans la page de test navigateur.
 - `extension/options.html`, `extension/options.css`, `extension/options.js` :
-  interface française de gestion des associations et de l'activation, avec
-  validation, état non enregistré, retour d'erreur et réinitialisation.
+  interface localisée de gestion des associations et de l'activation, avec
+  recherche, import groupé du catalogue Unicode, validation, état non enregistré,
+  retour d'erreur, réinitialisation aux valeurs par défaut et suppression
+  confirmée de toutes les associations en conservant l'activation et le catalogue.
+  Les textes HTML utilisent `data-i18n` et le script `chrome.i18n.getMessage` ;
+  conserver les clés synchronisées entre les deux fichiers de locale.
 - `extension/icons/` : icônes Lucide et licence ISC.
 - `tests/rules.test.cjs` : tests Node du moteur.
+- `tests/catalog.test.cjs` : tests Node du parseur et de l'import sans écrasement.
+- `tests/i18n.test.cjs` : vérifie la locale anglaise par défaut, la parité des
+  traductions et les références utilisées par l'interface.
 - `tests/browser.html` : tests du moteur dans le navigateur et éditeur de test
   avec un stockage Chrome simulé pour exercer le script de contenu ; un bouton
   lance les tests de suggestions dans un éditeur temporaire.
@@ -68,6 +86,16 @@ suivent le commutateur de remplacement et les changements de réglages.
 
 Les réglages sont enregistrés sous la clé `settings` de `chrome.storage.local`,
 sous la forme `{ formatVersion: 2, enabled, mappings: [{ shortcut, emoji }] }`.
+La copie du catalogue est enregistrée séparément sous `emojiCatalog` et est
+actualisée depuis `https://unicode.org/Public/emoji/latest/emoji-test.txt` à
+l'ouverture des réglages si elle date de plus de sept jours. L'import ajoute
+les séquences emoji absentes et génère un raccourci à partir du nom Unicode ;
+une association déjà présente ou un raccourci en conflit n'est jamais écrasé.
+Les erreurs d'actualisation sont signalées et une copie locale existante reste
+utilisable. La page des réglages possède un accès réseau limité à `unicode.org` ;
+aucun réglage n'est transmis. L'action « Tout vider » supprime toutes les
+associations après confirmation, mais conserve l'activation et le catalogue ;
+le bouton de réinitialisation restaure uniquement les associations par défaut.
 Les anciens réglages sans version 2 convertissent à la lecture les raccourcis
 encadrés de parenthèses en raccourcis encadrés de deux-points, même pour les
 associations personnalisées. En cas de conflit, l'association déjà écrite avec
@@ -75,7 +103,8 @@ des deux-points est conservée. La conversion est persistée à l'enregistrement
 des réglages ; les nouveaux raccourcis personnalisés restent libres. Le script de
 contenu écoute les changements pour les appliquer aux onglets ouverts. En
 aperçu direct de `options.html`, `localStorage` utilise la clé distincte
-`messenger-emoji-preview` et ne configure pas l'extension installée.
+`messenger-emoji-preview`, l'anglais sert de langue de secours et l'aperçu ne
+configure pas l'extension installée.
 
 La normalisation conserve une liste volontairement vide, retire les entrées
 invalides ou les doublons et limite chaque chaîne à 80 unités JavaScript ; un
@@ -85,9 +114,11 @@ Attention aux sélections, aux nœuds de texte multiples, aux retours à la lign
 à la composition IME, aux événements de saisie et à l'annulation : l'éditeur
 Messenger peut évoluer et les tests isolés ne remplacent pas un essai réel.
 
-Préserver le périmètre d'accès limité à Messenger et la confidentialité des
-réglages. Toute nouvelle permission ou tout changement de collecte ou de
-stockage doit être justifié et documenté.
+Préserver le périmètre des scripts de contenu limité à Messenger et la
+confidentialité des réglages. L'accès réseau de la page des réglages à
+`unicode.org` sert uniquement au téléchargement du catalogue public ; aucune
+donnée utilisateur n'est envoyée. Toute nouvelle permission ou tout changement
+de collecte ou de stockage doit être justifié et documenté.
 
 ## Installation et vérification
 
@@ -98,8 +129,9 @@ l'extension, la recharger dans Chrome puis recharger l'onglet Messenger.
 
 Selon les fichiers modifiés :
 
-1. Exécuter `node --test tests/rules.test.cjs` avec Node.js 18 ou plus pour les
-   règles. Ajouter des tests ciblés si leur comportement change.
+1. Exécuter `node --test tests/*.test.cjs` avec Node.js 18 ou plus pour les
+   règles, l'import du catalogue et la cohérence des locales. Ajouter des tests
+   ciblés si leur comportement change.
 2. Ouvrir `tests/browser.html` dans un navigateur : vérifier les résultats
    affichés et exercer l'éditeur de test pour les changements de saisie, de
    filtrage des suggestions, de validation par Entrée et de sélection à la souris.
@@ -109,7 +141,8 @@ Selon les fichiers modifiés :
    l'envoi du texte remplacé et `Ctrl+Z`. Tester les champs de recherche, le
    collage et la composition si la saisie est concernée.
 4. Pour l'interface, vérifier également la validation, les erreurs, les
-   modifications non enregistrées et, si pertinent, l'aperçu direct.
+   modifications non enregistrées, la suppression complète des associations
+   sans effacer le catalogue, et, si pertinent, l'aperçu direct.
 
 Préciser dans le compte rendu les vérifications réellement effectuées et celles
 qui nécessitent encore un navigateur ou un compte Messenger connecté.
